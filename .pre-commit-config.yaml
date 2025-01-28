@@ -1,0 +1,16 @@
+repos:
+# General house-keeping tasks
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-added-large-files
+    -   id: check-case-conflict
+    -   id: check-symlinks
+
+# Formatting tasks
+-   repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+    -   id: black
