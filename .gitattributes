@@ -1,0 +1,2 @@
+roms/sfiii3n.zip filter=lfs diff=lfs merge=lfs -text
+.github/readme_img.jpg filter=lfs diff=lfs merge=lfs -text

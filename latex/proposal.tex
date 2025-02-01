@@ -1,0 +1,159 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{csquotes}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\title{\LARGE \bf
+CSC 570 Project Proposal.
+}
+
+\author{Sarah Duncan, Yayun Tan, Abigayle Mercer, Damian, Braeden Kennedy\\
+Cal Poly,\\
+San Luis Obispo, United States\\
+\{sdunca07, ytan15, abmercer, damian email, bkenne07\}@calpoly.edu
+}
+
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+\begin{abstract}
+
+Write an abstract for you report. You should make sure it depicts the general idea of what you want to do. Copy this project in the overleaf menu (top left)For final reports, you can add a summary of results achieved e.g. \enquote{our model achieves higher accuracy than previously pulished models} DO NOT PLAGIARIZE! DO NOT COPY-PASTE TEXT FROM OTHER PAPERS!
+
+\end{abstract}
+
+Copy this project in the overleaf menu (top left)
+
+\section{INTRODUCTION}
+
+What problem are you trying to solve?
+
+Why is this important?
+
+How does this project relate to the class objectives?
+
+What will be your contribution?
+
+\subsection{Report size}
+
+Project proposals should have \textbf{2 pages}. Final reports should have \textbf{between 6-8} pages.
+
+
+
+\section{RELATED WORK}
+
+Has this been done before? How?
+
+If not, what’s the closest related research? (Both using similar approaches and other algorithms.)
+
+What’s novel with your research?
+
+Note that you can do \enquote{quotations} using the enquote command or using a combination of left and right single quotes ``like this'', but regular "double quotes" will not be rendered correctly.
+
+For project proposals, you must add at least \textbf{5 references} in the bibliography (in the file \textit{bibliography.bib} and \textit{in the text})! \textbf{Every reference that appears on your reference list must also be cited in the text}. Example of referencing in text: ~\cite{togelius2007towards}. Avoid starting a sentence with a numbered reference.
+
+\section{METHODS}
+
+What game do you intent to use? What algorithms do you intent to use?
+
+Describe in as much detail as you can fit into the report.
+
+
+\subsection{Tables and images}
+
+\begin{table}[h]
+\caption{An Example of a Table: win-rate of the agents in each of the three scenarios, averaged over 1000 games. }
+\label{table_example}
+\begin{center}
+\begin{tabular}{|c||c|c|c|}
+\hline
+  & Scenario 1 & Scenario 2 & Scenario 3\\
+\hline
+\hline
+Agent 1 & 0.4 & 0.5 & 0.6\\
+\hline
+Agent 2 & 0.5 & 0.7 & 0.6 \\
+\hline
+Agent 3 & 0.45 & 0.3 & 0.8 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+   \begin{figure}[thpb]
+      \centering
+
+      \includegraphics[scale=1.0]{fig1.png}
+      \caption{Example of caption}
+      \label{figurelabel}
+   \end{figure}
+
+Example of table insertion in Table \ref{table_example}. Example of figure in Figure \ref{figurelabel}. When referencing tables and figures, add Table and Figure, respectively, before the reference.
+
+Every table or figure should have a caption describing, at least, what the figure is about (for example ``agent performance''). Ideally, the caption should also provide some context to help make the table or image understandable without finding where it is cited in the text (common examples: how many games were played? What's the confidence interval? Is bigger or smaller better How do I read rows vs columns?). There's a bit of leeway regarding what goes on the caption and what goes on the main text describing the table. Use your best judgment.
+
+
+\section{Evaluation / Results}
+
+For the project proposal, you will not yet have results, but you should describe any numerical or subjective criteria you are planning to use to evaluate your solution. If you are using a pre-existing alternative solution to the problem as a baseline, identify this baseline.
+
+Describe your evaluation scenarios  and  evaluation criteria. Note that evaluation criteria refers to metrics you, as a group, use to evaluate the success of your system. It does not refer to criteria the system uses to evaluate how well it’s doing at a given point.
+
+For example, win rate (versus a specified opponent) is a good evaluation criteria in a chess-playing program. The score of a position (as measured by the material on the board) is not!
+
+
+\section{CONCLUSIONS}
+
+For the proposal, this should summarize the things that you might want to do (or have done):
+\begin{itemize}
+\item A new game-playing algorithm
+\item A new way of using an existing algorithm in a game, AI for your existing game
+\item A new procedural generation algorithm
+\item An analysis of how use PCG in various types of games
+\item A characterization of a problem
+\item A new user study
+\end{itemize}
+
+For the final report, you should return to the ``big picture'' problem you described in the introduction and summarize how your findings change our understanding of that problem. You should also discuss the main advantages or shortcomings of the algorithm, any surprising remarks you made over the course of development, and any opportunities of future work.
+
+PS. Overleaf supports git under the Share tab. Might be useful.
+
+PS2: This template was inspired and meant to be a simplified version of the template used at CoG and many IEEE publications, which can be found at~\cite{IEEEtemplate}. This is a useful resource that provides several best practices in academic writing and also trobuleshoots common latex problems.
+
+
+\subsection{References}
+
+For project proposals, you must add at least \textbf{5 references}.
+
+For final reports, there are no strict limits of number of references, but there should be enough references to properly describe what previous work has been done in the domain you've chosen (and how your project differs from it), to allow readers to reproduce your paper and to back up any facts you bring up that a reader might need to verify or to reproduce your work if they're interested.
+For example: let's say you're using Autoencoders to generate Candy Crush levels. We would expect:
+\begin{itemize}
+    \item Some references describing what Autoencoders are and to what purposes they have been used before
+    \item Some methods to what other methods have been used to generate Candy Crush levels in the past (unless it's a brand new field, in which case, pick the closest games you can find)
+    \item If you're using previously gathered real world data, or if you're using an existing agent or framework as a starting point,  references that allows us to find this material.
+    \item  If you're evaluating these levels by having an agent play it, references to the agent (if pre-existing) or the techniques used to build it (if making your own agent)
+    \item (Optionally, but desirable) References to PCG in games in general, and agents for Candy Crush in general
+    \item Vague, common-sense statements like ``Candy Crush is a popular game'' don't really require a reference (but avoid making too many of those), but a verifiable statement like ``Candy Crush is among the top 10 best-selling games of the decade'' does.
+\end{itemize}
+
+\bibliographystyle{IEEEtran}
+\bibliography{bibliography}
+
+
+
+
+\end{document}
