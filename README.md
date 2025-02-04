@@ -31,6 +31,14 @@ source .venv/bin/activate
 diambra run -s 8 -r "$PWD/roms/" python training.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc.yaml"
 ```
 
+### Evaluating
+To start evaluation of an agent:
+```
+sudo service docker start
+source .venv/bin/activate
+diambra run -r "$PWD/roms/" python evaluate.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc.yaml"
+```
+
 ### Tensorboard
 ```
 source .venv/bin/activate
