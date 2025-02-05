@@ -10,6 +10,7 @@ from diambra.arena.stable_baselines3.make_sb3_env import (
 )
 from diambra.arena.stable_baselines3.sb3_utils import linear_schedule, AutoSave
 from stable_baselines3 import PPO
+import cv2
 
 # diambra run -r "$PWD/roms/" python evaluate.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc.yaml"
 
@@ -45,7 +46,7 @@ def main(cfg_file):
 
     # Create environment
     env, num_envs = make_sb3_env(
-        settings.game_id, settings, wrappers_settings, render_mode="human"
+        settings.game_id, settings, wrappers_settings, render_mode="rgb_array"
     )
     print("Activated {} environment(s)".format(num_envs))
 
@@ -63,11 +64,17 @@ def main(cfg_file):
     print("Policy architecture:")
     print(agent.policy)
 
+    out = cv2.VideoWriter(
+        "output.avi", cv2.VideoWriter_fourcc(*"XVID"), 30.0, (128, 128), False
+    )
+
     # Run trained agent
     observation = env.reset()
     cumulative_reward = 0
     while True:
-        env.render()
+        frame = env.render()
+
+        out.write(frame)
 
         action, _state = agent.predict(observation, deterministic=True)
         observation, reward, done, info = env.step(action)
@@ -79,6 +86,8 @@ def main(cfg_file):
         if done:
             observation = env.reset()
             break
+
+    out.release()
 
     # Close the environment
     env.close()
