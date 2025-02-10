@@ -2,6 +2,7 @@ import os
 import yaml
 import json
 import argparse
+import numpy as np
 from diambra.arena import load_settings_flat_dict, SpaceTypes
 from diambra.arena.stable_baselines3.make_sb3_env import (
     make_sb3_env,
@@ -9,7 +10,9 @@ from diambra.arena.stable_baselines3.make_sb3_env import (
     WrappersSettings,
 )
 from diambra.arena.stable_baselines3.sb3_utils import linear_schedule, AutoSave
-from stable_baselines3 import PPO
+from sb3_contrib import QRDQN
+
+from stable_baselines3.common.noise import NormalActionNoise
 
 # diambra run -s 8 -r "$PWD/roms/" python training.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc.yaml"
 
@@ -75,34 +78,46 @@ def main(cfg_file):
     n_epochs = ppo_settings["n_epochs"]
     n_steps = ppo_settings["n_steps"]
 
-    if model_checkpoint == "0":
-        # Initialize the agent
-        agent = PPO(
-            "MultiInputPolicy",
-            env,
-            verbose=1,
-            gamma=gamma,
-            batch_size=batch_size,
-            n_epochs=n_epochs,
-            n_steps=n_steps,
-            learning_rate=learning_rate,
-            clip_range=clip_range,
-            clip_range_vf=clip_range_vf,
-            policy_kwargs=policy_kwargs,
-            tensorboard_log=tensor_board_folder,
-        )
-    else:
-        # Load the trained agent
-        agent = PPO.load(
-            os.path.join(model_folder, model_checkpoint),
-            env=env,
-            gamma=gamma,
-            learning_rate=learning_rate,
-            clip_range=clip_range,
-            clip_range_vf=clip_range_vf,
-            policy_kwargs=policy_kwargs,
-            tensorboard_log=tensor_board_folder,
-        )
+    # if model_checkpoint == "0":
+    #     # Initialize the agent
+    #     agent = PPO(
+    #         "MultiInputPolicy",
+    #         env,
+    #         verbose=1,
+    #         gamma=gamma,
+    #         batch_size=batch_size,
+    #         n_epochs=n_epochs,
+    #         n_steps=n_steps,
+    #         learning_rate=learning_rate,
+    #         clip_range=clip_range,
+    #         clip_range_vf=clip_range_vf,
+    #         policy_kwargs=policy_kwargs,
+    #         tensorboard_log=tensor_board_folder,
+    #     )
+    # else:
+    #     # Load the trained agent
+    #     agent = PPO.load(
+    #         os.path.join(model_folder, model_checkpoint),
+    #         env=env,
+    #         gamma=gamma,
+    #         learning_rate=learning_rate,
+    #         clip_range=clip_range,
+    #         clip_range_vf=clip_range_vf,
+    #         policy_kwargs=policy_kwargs,
+    #         tensorboard_log=tensor_board_folder,
+    #     )
+    policy_kwargs = dict(n_quantiles=50)
+    agent = QRDQN(
+        "MultiInputPolicy", 
+        env, 
+        policy_kwargs=policy_kwargs,
+        learning_rate=learning_rate,
+        buffer_size=10000,
+        gamma=gamma,
+        batch_size=batch_size,
+        tensorboard_log=tensor_board_folder,
+        verbose=1,
+    )
 
     # Print policy network architecture
     print("Policy architecture:")
@@ -114,7 +129,7 @@ def main(cfg_file):
         check_freq=autosave_freq,
         num_envs=num_envs,
         save_path=model_folder,
-        filename_prefix=model_checkpoint + "_",
+        filename_prefix=model_checkpoint + "_DQ-DQN_",
     )
 
     # Train the agent
@@ -122,7 +137,7 @@ def main(cfg_file):
     agent.learn(total_timesteps=time_steps, callback=auto_save_callback)
 
     # Save the agent
-    new_model_checkpoint = str(int(model_checkpoint) + time_steps)
+    new_model_checkpoint = "DQ-DQN_" + str(int(model_checkpoint) + time_steps)
     model_path = os.path.join(model_folder, new_model_checkpoint)
     agent.save(model_path)
 

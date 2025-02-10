@@ -9,7 +9,7 @@ from diambra.arena.stable_baselines3.make_sb3_env import (
     WrappersSettings,
 )
 from diambra.arena.stable_baselines3.sb3_utils import linear_schedule, AutoSave
-from stable_baselines3 import PPO
+from sb3_contrib import QRDQN
 
 # diambra run -r "$PWD/roms/" python evaluate.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc.yaml"
 
@@ -54,8 +54,8 @@ def main(cfg_file):
     model_checkpoint = ppo_settings["model_checkpoint"]
 
     # Load the trained agent
-    agent = PPO.load(
-        os.path.join(model_folder, model_checkpoint),
+    agent = QRDQN.load(
+        "./results/sfiii3n/sr6_128x4_das_nc/model/DQ-DQN_50000.zip",
         env=env,
     )
 
