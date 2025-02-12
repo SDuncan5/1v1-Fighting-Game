@@ -9,9 +9,9 @@ from diambra.arena.stable_baselines3.make_sb3_env import (
     WrappersSettings,
 )
 from diambra.arena.stable_baselines3.sb3_utils import linear_schedule, AutoSave
-from stable_baselines3 import PPO
+from stable_baselines3 import A2C
 
-# diambra run -s 8 -r "$PWD/roms/" python training.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc.yaml"
+# diambra run -s 8 -r "$PWD/roms/" python training.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc_A2C.yaml"
 
 
 def main(cfg_file):
@@ -60,46 +60,35 @@ def main(cfg_file):
     policy_kwargs = params["policy_kwargs"]
 
     # PPO settings
-    ppo_settings = params["ppo_settings"]
-    gamma = ppo_settings["gamma"]
-    model_checkpoint = ppo_settings["model_checkpoint"]
+    a2c_settings = params["a2c_settings"]
+    gamma = a2c_settings["gamma"]
+    model_checkpoint = a2c_settings["model_checkpoint"]
 
     learning_rate = linear_schedule(
-        ppo_settings["learning_rate"][0], ppo_settings["learning_rate"][1]
+        a2c_settings["learning_rate"][0], a2c_settings["learning_rate"][1]
     )
-    clip_range = linear_schedule(
-        ppo_settings["clip_range"][0], ppo_settings["clip_range"][1]
-    )
-    clip_range_vf = clip_range
-    batch_size = ppo_settings["batch_size"]
-    n_epochs = ppo_settings["n_epochs"]
-    n_steps = ppo_settings["n_steps"]
+    n_steps = a2c_settings["n_steps"]
 
     if model_checkpoint == "0":
         # Initialize the agent
-        agent = PPO(
+        agent = A2C(
             "MultiInputPolicy",
             env,
             verbose=1,
             gamma=gamma,
-            batch_size=batch_size,
-            n_epochs=n_epochs,
             n_steps=n_steps,
             learning_rate=learning_rate,
-            clip_range=clip_range,
-            clip_range_vf=clip_range_vf,
             policy_kwargs=policy_kwargs,
             tensorboard_log=tensor_board_folder,
         )
     else:
         # Load the trained agent
-        agent = PPO.load(
+        agent = A2C.load(
             os.path.join(model_folder, model_checkpoint),
             env=env,
             gamma=gamma,
+            n_steps=n_steps,
             learning_rate=learning_rate,
-            clip_range=clip_range,
-            clip_range_vf=clip_range_vf,
             policy_kwargs=policy_kwargs,
             tensorboard_log=tensor_board_folder,
         )
@@ -109,7 +98,7 @@ def main(cfg_file):
     print(agent.policy)
 
     # Create the callback: autosave every USER DEF steps
-    autosave_freq = ppo_settings["autosave_freq"]
+    autosave_freq = a2c_settings["autosave_freq"]
     auto_save_callback = AutoSave(
         check_freq=autosave_freq,
         num_envs=num_envs,
@@ -118,7 +107,7 @@ def main(cfg_file):
     )
 
     # Train the agent
-    time_steps = ppo_settings["time_steps"]
+    time_steps = a2c_settings["time_steps"]
     agent.learn(total_timesteps=time_steps, callback=auto_save_callback)
 
     # Save the agent

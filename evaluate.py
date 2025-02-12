@@ -11,7 +11,7 @@ from diambra.arena.stable_baselines3.make_sb3_env import (
 from diambra.arena.stable_baselines3.sb3_utils import linear_schedule, AutoSave
 from stable_baselines3 import PPO
 
-# diambra run -r "$PWD/roms/" python evaluate.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc.yaml"
+# diambra run -r "$PWD/roms/" python evaluate.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc_A2C.yaml"
 
 
 def main(cfg_file):
@@ -50,8 +50,8 @@ def main(cfg_file):
     print("Activated {} environment(s)".format(num_envs))
 
     # PPO settings
-    ppo_settings = params["ppo_settings"]
-    model_checkpoint = ppo_settings["model_checkpoint"]
+    a2c_settings = params["a2c_settings"]
+    model_checkpoint = a2c_settings["model_checkpoint"]
 
     # Load the trained agent
     agent = PPO.load(
