@@ -139,7 +139,7 @@ def main(cfg_file):
     agent.learn(total_timesteps=time_steps, callback=auto_save_callback)
 
     # Save the agent
-    new_model_checkpoint = "DQ-DQN_" + str(int(model_checkpoint) + time_steps)
+    new_model_checkpoint = "QR-DQN_" + str(int(model_checkpoint) + time_steps)
     model_path = os.path.join(model_folder, new_model_checkpoint)
     agent.save(model_path)
 
