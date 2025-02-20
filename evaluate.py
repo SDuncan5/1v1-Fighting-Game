@@ -2,6 +2,7 @@ import os
 import yaml
 import json
 import argparse
+
 from diambra.arena import load_settings_flat_dict, SpaceTypes
 from diambra.arena.stable_baselines3.make_sb3_env import (
     make_sb3_env,
@@ -9,17 +10,20 @@ from diambra.arena.stable_baselines3.make_sb3_env import (
     WrappersSettings,
 )
 from diambra.arena.stable_baselines3.sb3_utils import linear_schedule, AutoSave
-from stable_baselines3 import PPO
 
-# diambra run -r "$PWD/roms/" python evaluate.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc.yaml"
+# R-PPO
+from sb3_contrib.ppo_recurrent import RecurrentPPO
 
 
-def main(cfg_file):
-    # Read the cfg file
-    yaml_file = open(cfg_file)
-    params = yaml.load(yaml_file, Loader=yaml.FullLoader)
+from stable_baselines3.common.vec_env import VecVideoRecorder
+import numpy as np
+
+
+def main(cfg_file, model_file):
+    # Read cfg
+    with open(cfg_file, "r") as yaml_file:
+        params = yaml.load(yaml_file, Loader=yaml.FullLoader)
     print("Config parameters = ", json.dumps(params, sort_keys=True, indent=4))
-    yaml_file.close()
 
     base_path = os.path.dirname(os.path.abspath(__file__))
     model_folder = os.path.join(
@@ -43,54 +47,63 @@ def main(cfg_file):
         WrappersSettings, params["wrappers_settings"]
     )
 
-    # Create environment
+    #  "rgb_array"
     env, num_envs = make_sb3_env(
-        settings.game_id, settings, wrappers_settings, render_mode="human"
+        settings.game_id, settings, wrappers_settings, render_mode="rgb_array"
     )
+    # env, num_envs = make_sb3_env(
+    # settings.game_id,
+    # settings,
+    # wrappers_settings,
+    # render_mode="rgb_array",
+    # n_env=1
+    # )
     print("Activated {} environment(s)".format(num_envs))
 
-    # PPO settings
-    ppo_settings = params["ppo_settings"]
-    model_checkpoint = ppo_settings["model_checkpoint"]
+    video_folder = "./videos_eval"
+    os.makedirs(video_folder, exist_ok=True)
 
-    # Load the trained agent
-    agent = PPO.load(
-        os.path.join(model_folder, model_checkpoint),
-        env=env,
+    env = VecVideoRecorder(
+        env,
+        video_folder,
+        record_video_trigger=lambda step: step == 0,
+        video_length=3000,
+        name_prefix="evaluation",
     )
 
-    # Print policy network architecture
+    # R-PPO model
+    model_path = os.path.join(model_folder, model_file)
+    print(f"Loading model from: {model_path}")
+    agent = RecurrentPPO.load(model_path, env=env)
+
     print("Policy architecture:")
     print(agent.policy)
 
-    # Run trained agent
-    observation = env.reset()
-    cumulative_reward = 0
-    while True:
-        env.render()
+    obs = env.reset()
+    done = [False]
+    state = None
+    cumulative_reward = 0.0
 
-        action, _state = agent.predict(observation, deterministic=True)
-        observation, reward, done, info = env.step(action)
+    while not done[0]:
+        action, state = agent.predict(
+            obs, state=state, episode_start=done, deterministic=True
+        )
+        obs, rewards, done, infos = env.step(action)
 
-        cumulative_reward += reward
-        if reward != 0:
-            print("Cumulative reward =", cumulative_reward)
+        cumulative_reward += rewards[0]
 
-        if done:
-            observation = env.reset()
-            break
+    print("Episode done, total reward:", cumulative_reward)
 
-    # Close the environment
     env.close()
-
-    # Return success
     return 0
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--cfgFile", type=str, required=True, help="Configuration file")
+    parser.add_argument(
+        "--model", type=str, default="1000000.zip", help="Model file to load"
+    )
     opt = parser.parse_args()
     print(opt)
-
-    main(opt.cfgFile)
+    main(opt.cfgFile, opt.model)

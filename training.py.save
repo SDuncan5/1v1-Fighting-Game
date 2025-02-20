@@ -1,8 +1,10 @@
-import os
+
+nano training.py
+nano training.py
+mport os
 import yaml
 import json
 import argparse
-
 from diambra.arena import load_settings_flat_dict, SpaceTypes
 from diambra.arena.stable_baselines3.make_sb3_env import (
     make_sb3_env,
@@ -10,9 +12,9 @@ from diambra.arena.stable_baselines3.make_sb3_env import (
     WrappersSettings,
 )
 from diambra.arena.stable_baselines3.sb3_utils import linear_schedule, AutoSave
+from stable_baselines3 import PPO
 
-# import RecurrentPPO
-from sb3_contrib.ppo_recurrent import RecurrentPPO, MultiInputLstmPolicy
+# diambra run -s 8 -r "$PWD/roms/" python training.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc.yaml"
 
 
 def main(cfg_file):
@@ -76,13 +78,11 @@ def main(cfg_file):
     n_epochs = ppo_settings["n_epochs"]
     n_steps = ppo_settings["n_steps"]
 
-    # if use LSTM，adjust batch_size/n_steps
     if model_checkpoint == "0":
-        # Initialize the agent (train from scratch)
-        # 改用 RecurrentPPO + MultiInputLstmPolicy
-        agent = RecurrentPPO(
-            policy=MultiInputLstmPolicy,
-            env=env,
+        # Initialize the agent
+        agent = PPO(
+            "MultiInputPolicy",
+            env,
             verbose=1,
             gamma=gamma,
             batch_size=batch_size,
@@ -96,7 +96,7 @@ def main(cfg_file):
         )
     else:
         # Load the trained agent
-        agent = RecurrentPPO.load(
+        agent = PPO.load(
             os.path.join(model_folder, model_checkpoint),
             env=env,
             gamma=gamma,
