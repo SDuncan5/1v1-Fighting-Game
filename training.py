@@ -117,6 +117,8 @@ def main(cfg_file):
         batch_size=batch_size,
         tensorboard_log=tensor_board_folder,
         verbose=1,
+        train_freq=50,
+        exploration_fraction=0.75
     )
 
     # Print policy network architecture

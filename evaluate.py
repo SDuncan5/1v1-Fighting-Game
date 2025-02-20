@@ -55,7 +55,7 @@ def main(cfg_file):
 
     # Load the trained agent
     agent = QRDQN.load(
-        "./results/sfiii3n/sr6_128x4_das_nc/model/DQ-DQN_50000.zip",
+        "./DQ-DQN_exploratory_2mil.zip",
         env=env,
     )
 
