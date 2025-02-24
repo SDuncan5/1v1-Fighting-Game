@@ -17,7 +17,7 @@ from stable_baselines3 import PPO
 def main(cfg_file):
     # Read the cfg file
     yaml_file = open(cfg_file)
-    params = yaml.load(yaml_file, Loader=yaml.FullLoader)
+    params = yaml.load(yaml_file, Loader=yaml.FullLoader)  # loads env into dict
     print("Config parameters = ", json.dumps(params, sort_keys=True, indent=4))
     yaml_file.close()
 
