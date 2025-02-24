@@ -39,6 +39,10 @@ source .venv/bin/activate
 diambra run -r "$PWD/roms/" python evaluate.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc.yaml"
 ```
 
+### Playing an Agent
+```
+diambra run -r "$PWD/roms/" python play_test.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc.yaml"
+```
 ### Tensorboard
 ```
 source .venv/bin/activate
