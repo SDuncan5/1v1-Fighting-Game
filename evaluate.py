@@ -68,7 +68,7 @@ def main(cfg_file):
     cumulative_reward = 0
     while True:
         env.render()
-
+        print(observation)
         action, _state = agent.predict(observation, deterministic=True)
         observation, reward, done, info = env.step(action)
 

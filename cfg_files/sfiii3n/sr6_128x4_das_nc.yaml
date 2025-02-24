@@ -13,6 +13,7 @@ settings:
   outfits: 2
 
 wrappers_settings:
+  frame_shape: !!python/tuple [128, 128, 1]
   normalize_reward: true
   no_attack_buttons_combinations: true
   stack_frames: 4
@@ -41,3 +42,18 @@ ppo_settings:
   n_steps: 128
   autosave_freq: 256
   time_steps: 512
+
+
+play_settings:
+  game_id: "sfiii3n"
+  step_ratio: 6
+  frame_shape: !!python/tuple [128, 128, 1]
+  continue_game: 0.0
+
+  action_space: ["discrete", "discrete"]  # Ensure both players use the same input method
+  characters: ["Ryu", "Ryu"]  # Both players use Ryu
+  difficulty: 6
+  outfits: [2, 2]  # Outfits for both players
+
+  disable_keyboard: false  # ✅ **Enable keyboard control for Player 1**
+  disable_joystick: true  # Disable joystick input
