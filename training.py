@@ -13,8 +13,26 @@ from diambra.arena.stable_baselines3.sb3_utils import linear_schedule, AutoSave
 from sb3_contrib import QRDQN
 
 from stable_baselines3.common.noise import NormalActionNoise
+from gymnasium.spaces import Discrete
+from gymnasium.spaces.space import MaskNDArray
+from random import choice
 
 # diambra run -s 8 -r "$PWD/roms/" python training.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc.yaml"
+
+class CustomSpace(Discrete):
+    def __init__(self, list : list[int]):
+        self.list = list
+        super().__init__(len(list))
+    
+    def sample(self, mask: MaskNDArray | None = None, 
+               probability: MaskNDArray | None = None) -> np.int64:
+        return np.int64(choice(self.list) + 1)
+    
+    def contains(self, x: any) -> bool:
+        return x in self.list
+    
+    def __repr__(self) -> str:
+        return f"CustomSpace({self.list})"
 
 
 def main(cfg_file):
@@ -78,34 +96,11 @@ def main(cfg_file):
     n_epochs = ppo_settings["n_epochs"]
     n_steps = ppo_settings["n_steps"]
 
-    # if model_checkpoint == "0":
-    #     # Initialize the agent
-    #     agent = PPO(
-    #         "MultiInputPolicy",
-    #         env,
-    #         verbose=1,
-    #         gamma=gamma,
-    #         batch_size=batch_size,
-    #         n_epochs=n_epochs,
-    #         n_steps=n_steps,
-    #         learning_rate=learning_rate,
-    #         clip_range=clip_range,
-    #         clip_range_vf=clip_range_vf,
-    #         policy_kwargs=policy_kwargs,
-    #         tensorboard_log=tensor_board_folder,
-    #     )
-    # else:
-    #     # Load the trained agent
-    #     agent = PPO.load(
-    #         os.path.join(model_folder, model_checkpoint),
-    #         env=env,
-    #         gamma=gamma,
-    #         learning_rate=learning_rate,
-    #         clip_range=clip_range,
-    #         clip_range_vf=clip_range_vf,
-    #         policy_kwargs=policy_kwargs,
-    #         tensorboard_log=tensor_board_folder,
-    #     )
+    # change available actions
+    # env.action_space = CustomSpace([0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17])
+    # env.action_space = Discrete(18)
+    # print(env.action_space)
+
     policy_kwargs = dict(n_quantiles=50)
     agent = QRDQN(
         "MultiInputPolicy", 
@@ -116,9 +111,7 @@ def main(cfg_file):
         gamma=gamma,
         batch_size=batch_size,
         tensorboard_log=tensor_board_folder,
-        verbose=1,
-        train_freq=50,
-        exploration_fraction=0.75
+        verbose=1
     )
 
     # Print policy network architecture
@@ -131,7 +124,7 @@ def main(cfg_file):
         check_freq=autosave_freq,
         num_envs=num_envs,
         save_path=model_folder,
-        filename_prefix=model_checkpoint + "_DQ-DQN_",
+        filename_prefix=model_checkpoint + "_QR-DQN_CL_",
     )
 
     # Train the agent
@@ -139,7 +132,7 @@ def main(cfg_file):
     agent.learn(total_timesteps=time_steps, callback=auto_save_callback)
 
     # Save the agent
-    new_model_checkpoint = "QR-DQN_" + str(int(model_checkpoint) + time_steps)
+    new_model_checkpoint = "QR-DQN_CL_" + str(int(model_checkpoint) + time_steps)
     model_path = os.path.join(model_folder, new_model_checkpoint)
     agent.save(model_path)
 
