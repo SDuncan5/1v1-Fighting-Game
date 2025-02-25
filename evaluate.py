@@ -57,7 +57,7 @@ def main(cfg_file):
     # Load the trained agent
     # env.action_space = Discrete(18)
     agent = QRDQN.load(
-        "./results/sfiii3n/sr6_128x4_das_nc/model/0_QR-DQN_CL_autosave_500000.zip",
+        "./QRDQN_5mil_steps.zip",
         env=env,
     )
 
