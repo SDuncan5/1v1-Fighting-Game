@@ -1,3 +1,4 @@
 roms/sfiii3n.zip filter=lfs diff=lfs merge=lfs -text
 models/Multi_PPO_4000000.zip filter=lfs diff=lfs merge=lfs -text
+models/Multi_PPO_4000000_Discrete.zip filter=lfs diff=lfs merge=lfs -text
 .github/readme_img.jpg filter=lfs diff=lfs merge=lfs -text
