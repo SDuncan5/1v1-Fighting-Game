@@ -10,6 +10,8 @@ from diambra.arena.stable_baselines3.make_sb3_env import (
 )
 from diambra.arena.stable_baselines3.sb3_utils import linear_schedule, AutoSave
 from stable_baselines3 import PPO
+import cv2
+import matplotlib.pyplot as plt
 
 # diambra run -r "$PWD/roms/" python evaluate.py --cfgFile "$PWD/cfg_files/sfiii3n/sr6_128x4_das_nc_A2C.yaml"
 
@@ -45,7 +47,7 @@ def main(cfg_file):
 
     # Create environment
     env, num_envs = make_sb3_env(
-        settings.game_id, settings, wrappers_settings, render_mode="human"
+        settings.game_id, settings, wrappers_settings, render_mode="rgb_array"
     )
     print("Activated {} environment(s)".format(num_envs))
 
@@ -63,22 +65,51 @@ def main(cfg_file):
     print("Policy architecture:")
     print(agent.policy)
 
-    # Run trained agent
-    observation = env.reset()
-    cumulative_reward = 0
-    while True:
-        env.render()
+    out = cv2.VideoWriter(
+        "output.avi", cv2.VideoWriter_fourcc(*"XVID"), 30.0, (128, 128), False
+    )
 
-        action, _state = agent.predict(observation, deterministic=True)
-        observation, reward, done, info = env.step(action)
+    expectation = 0
+    iters = 1
 
-        cumulative_reward += reward
-        if reward != 0:
-            print("Cumulative reward =", cumulative_reward)
+    for i in range(iters):
 
-        if done:
-            observation = env.reset()
-            break
+        # Run trained agent
+        observation = env.reset()
+        cumulative_reward = 0
+        cumulative_rewards = []
+        while True:
+            frame = env.render()
+
+            out.write(frame)
+
+            # action = env.action_space.sample()
+            # observation, reward, done, info = env.step([action])
+
+            action, _state = agent.predict(observation, deterministic=True)
+            observation, reward, done, info = env.step(action)
+
+            cumulative_reward += reward
+            if reward != 0:
+                print("Cumulative reward =", cumulative_reward)
+
+            cumulative_rewards.extend(cumulative_reward)
+
+            if done:
+                observation = env.reset()
+                break
+
+        plt.plot(cumulative_rewards)
+        expectation += cumulative_rewards[-1] / iters
+
+    plt.title("Stochastic Policy Action Selection")
+    plt.ylabel("Cumulative Reward")
+    plt.xlabel("Environment Steps")
+    plt.show()
+
+    print(expectation)
+
+    out.release()
 
     # Close the environment
     env.close()
