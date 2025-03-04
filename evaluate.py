@@ -57,7 +57,7 @@ def main(cfg_file):
     # Load the trained agent
     # env.action_space = Discrete(18)
     agent = QRDQN.load(
-        "./QRDQN_5mil_steps.zip",
+        "./QRDQN_5mil_steps_ryu.zip",
         env=env,
     )
 
@@ -72,6 +72,7 @@ def main(cfg_file):
         env.render()
 
         action, _state = agent.predict(observation, deterministic=True)
+        #print("action output: {}".format(action))
         observation, reward, done, info = env.step(action)
 
         cumulative_reward += reward

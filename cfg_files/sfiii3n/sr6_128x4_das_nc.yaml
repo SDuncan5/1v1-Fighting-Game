@@ -8,10 +8,9 @@ settings:
   frame_shape: !!python/tuple [128, 128, 1]
   continue_game: 0.0
   action_space: "discrete"
-  characters: "Chun-Li"
+  characters: "Ryu"
   difficulty: 6
-  outfits: 1
-  super_art: 2
+  outfits: 2
 
 wrappers_settings:
   normalize_reward: true
