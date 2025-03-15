@@ -1,10 +1,14 @@
-# folders:
-#   parent_dir: "./models/"
-#   model_name: "sr6_128x4_das_nc"
-#   trained_model: "Multi_PPO_12000000.zip"
 folders:
-    parent_dir: "./results/"
-    model_name: "sr6_128x4_das_nc"
+  parent_dir: "./models/"
+  model_name: "sr6_128x4_das_nc"
+  # trained_model: "Multi_PPO_12000000.zip"
+# folders:
+#     parent_dir: "./results/"
+#     model_name: "sr6_128x4_das_nc"
+
+episode_saving_settings:
+  num_iters: 50
+  csv_filename: "PPO_50iters.csv"
 
 settings:
   game_id: "sfiii3n"
