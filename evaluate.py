@@ -22,12 +22,16 @@ def main(cfg_file):
     yaml_file.close()
 
     base_path = os.path.dirname(os.path.abspath(__file__))
+    # model_folder = os.path.join(
+    #     base_path,
+    #     params["folders"]["parent_dir"],
+    #     params["settings"]["game_id"],
+    #     params["folders"]["model_name"],
+    #     "model",
+    # )
     model_folder = os.path.join(
         base_path,
         params["folders"]["parent_dir"],
-        params["settings"]["game_id"],
-        params["folders"]["model_name"],
-        "model",
     )
 
     # Settings
@@ -50,8 +54,9 @@ def main(cfg_file):
     print("Activated {} environment(s)".format(num_envs))
 
     # PPO settings
-    ppo_settings = params["ppo_settings"]
-    model_checkpoint = ppo_settings["model_checkpoint"]
+    # ppo_settings = params["ppo_settings"]
+    # model_checkpoint = ppo_settings["model_checkpoint"]
+    model_checkpoint = params["folders"]["trained_model"]
 
     # Load the trained agent
     agent = PPO.load(
@@ -75,6 +80,8 @@ def main(cfg_file):
         cumulative_reward += reward
         if reward != 0:
             print("Cumulative reward =", cumulative_reward)
+        print(f"Observation = {observation}")
+        print(f"Action = {action}")
 
         if done:
             observation = env.reset()

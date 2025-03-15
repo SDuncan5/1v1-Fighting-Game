@@ -1,20 +1,24 @@
+# folders:
+#   parent_dir: "./models/"
+#   model_name: "sr6_128x4_das_nc"
+#   trained_model: "Multi_PPO_12000000.zip"
 folders:
-  parent_dir: "./results/"
-  model_name: "sr6_128x4_das_nc"
+    parent_dir: "./results/"
+    model_name: "sr6_128x4_das_nc"
 
 settings:
   game_id: "sfiii3n"
   step_ratio: 6
   frame_shape: !!python/tuple [128, 128, 1]
   continue_game: 0.0
-  action_space: "multi_discrete"
+  action_space: "multidiscrete"
   characters: "Ryu"
   difficulty: 6
   outfits: 2
 
 wrappers_settings:
   normalize_reward: true
-  no_attack_buttons_combinations: true
+  no_attack_buttons_combinations: false
   stack_frames: 4
   dilation: 1
   add_last_action: true
@@ -31,7 +35,7 @@ policy_kwargs:
 
 ppo_settings:
   gamma: 0.94
-  model_checkpoint: "4000000.zip"
+  model_checkpoint: "12000000"
   learning_rate: [2.5e-4, 2.5e-6] # To start
   clip_range: [0.15, 0.025] # To start
   #learning_rate: [5.0e-5, 2.5e-6] # Fine Tuning
@@ -40,4 +44,4 @@ ppo_settings:
   n_epochs: 4
   n_steps: 128
   autosave_freq: 128000
-  time_steps: 2000000
+  time_steps: 6000000

@@ -25,12 +25,16 @@ def main(cfg_file, trained_model, test=False):
     yaml_file.close()
 
     base_path = os.path.dirname(os.path.abspath(__file__))
+    # model_folder = os.path.join(
+    #     base_path,
+    #     params["folders"]["parent_dir"],
+    #     params["settings"]["game_id"],
+    #     params["folders"]["model_name"],
+    #     "model",
+    # )
     model_folder = os.path.join(
         base_path,
         params["folders"]["parent_dir"],
-        params["settings"]["game_id"],
-        params["folders"]["model_name"],
-        "model",
     )
 
     # Settings
@@ -49,8 +53,11 @@ def main(cfg_file, trained_model, test=False):
     wrappers_settings.normalize_reward = False
 
     # Create environment
+    # env, num_envs = make_sb3_env(
+    #     settings.game_id, settings, wrappers_settings, render_mode="human", no_vec=True
+    # )
     env, num_envs = make_sb3_env(
-        settings.game_id, settings, wrappers_settings, render_mode="human", no_vec=True
+        settings.game_id, settings, wrappers_settings, render_mode="human"
     )
     print("Activated {} environment(s)".format(num_envs))
 
@@ -62,24 +69,33 @@ def main(cfg_file, trained_model, test=False):
     print("Policy architecture:")
     print(agent.policy)
 
-    obs, info = env.reset()
+    # obs, info = env.reset()
+    observation = env.reset()
     cumulative_reward = 0
     while True:
         env.render()
 
-        action, _ = agent.predict(obs, deterministic=False)
+        # action, _ = agent.predict(obs, deterministic=True)
+        action, _ = agent.predict(observation, deterministic=False)
 
-        obs, reward, terminated, truncated, info = env.step(action.tolist())
+        # obs, reward, terminated, truncated, info = env.step(action.tolist())
+        observation, reward, done, info = env.step(action)
 
         cumulative_reward += reward
         if reward != 0:
-            pass
             # print("Cumulative reward =", cumulative_reward)
+            pass
+        # print(f"Observation = {observation}")
+        # print(f"Action = {action}")
 
-        if terminated or truncated:
-            obs, info = env.reset()
-            if info["env_done"] or test is True:
+        # if terminated or truncated:
+        if done:
+            # observation, info = env.reset()
+            observation = env.reset()
+            if test is True:
                 break
+            # if info["env_done"] or test is True:
+            #     break
 
     # Close the environment
     env.close()
