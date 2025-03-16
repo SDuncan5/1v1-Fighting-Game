@@ -1,0 +1,62 @@
+folders:
+  parent_dir: "./results/"
+  model_name: "sr6_128x4_das_nc"
+
+settings:
+  game_id: "sfiii3n"
+  step_ratio: 6
+  frame_shape: !!python/tuple [128, 128, 1]
+  continue_game: 0.0
+  # action_space: "discrete"
+  action_space: "multidiscrete"
+  characters: "Ryu"
+  difficulty: 6
+  outfits: 2
+
+wrappers_settings:
+  normalize_reward: true
+  # no_attack_buttons_combinations: true
+  no_attack_buttons_combinations: false
+  stack_frames: 4
+  dilation: 1
+  add_last_action: true
+  # add_last_action: false
+  stack_actions: 12
+  scale: true
+  exclude_image_scaling: true
+  role_relative: true
+  flatten: true
+  filter_keys: ["action", "own_health", "opp_health", "own_side", "opp_side", "opp_character", "stage", "timer"]
+
+# policy_kwargs:
+#   #net_arch: [{ pi: [64, 64], vf: [32, 32] }]
+#   net_arch: [64, 64]
+policy_kwargs:
+  net_arch: [64, 64]
+  lstm_hidden_size: 128
+  n_lstm_layers: 1
+
+
+ppo_settings:
+  # gamma: 0.92
+  gamma: 0.93
+  # model_checkpoint: "0"
+  model_checkpoint: "2000000"
+  # learning_rate: [2.5e-4, 2.5e-6] # To start
+  # clip_range: [0.15, 0.025] # To start
+  # #learning_rate: [5.0e-5, 2.5e-6] # Fine Tuning
+  # #clip_range: [0.075, 0.025] # Fine Tuning
+  # batch_size: 256 #8 #nminibatches gave different batch size depending on the number of environments: batch_size = (n_steps * n_envs) // nminibatches
+  # n_epochs: 4
+  # n_steps: 128
+  # autosave_freq: 256
+  # time_steps: 512
+  learning_rate: [3e-4, 1e-5] # keep or adjust
+  clip_range: [0.15, 0.05] # keep or adjust
+  batch_size: 128
+  n_epochs: 6
+  n_steps: 512
+  autosave_freq: 200000  #
+  time_steps: 3000000
+  # ent_coef: 0.02   # 这里就是你想要添加的熵系数
+  ent_coef: 0.05   # 这里就是你想要添加的熵系数
