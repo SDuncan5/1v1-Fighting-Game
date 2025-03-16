@@ -1,3 +1,4 @@
+#discrete
 folders:
   parent_dir: "./results/"
   model_name: "sr6_128x4_das_nc"
