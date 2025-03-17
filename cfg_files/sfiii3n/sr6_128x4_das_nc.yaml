@@ -1,6 +1,14 @@
+# folders:
+#   parent_dir: "./results/"
+#   model_name: "sr6_128x4_das_nc"
+
 folders:
-  parent_dir: "./results/"
-  model_name: "sr6_128x4_das_nc"
+  parent_dir: "./"
+  # model_name: "sr6_128x4_das_nc"
+
+episode_saving_settings:
+  num_iters: 50
+  csv_filename: "QRDQN_50iters.csv"
 
 settings:
   game_id: "sfiii3n"
@@ -39,5 +47,5 @@ ppo_settings:
   batch_size: 256 #8 #nminibatches gave different batch size depending on the number of environments: batch_size = (n_steps * n_envs) // nminibatches
   n_epochs: 4
   n_steps: 128
-  autosave_freq: 500000
-  time_steps: 5000000
+  autosave_freq: 1000000
+  time_steps: 10000000

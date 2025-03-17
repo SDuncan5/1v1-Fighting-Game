@@ -114,6 +114,19 @@ def main(cfg_file):
         verbose=1
     )
 
+    # agent = QRDQN.load(
+    #     "./results/sfiii3n/sr6_128x4_das_nc/model/0_QR-DQN_CL_autosave_7000000.zip",
+    #     env=env, 
+    #     # policy_kwargs=policy_kwargs,
+    #     # learning_rate=0.000005,
+    #     # exploration_fraction=0.01,
+    #     # buffer_size=10000,
+    #     # gamma=gamma,
+    #     # batch_size=batch_size,
+    #     # tensorboard_log=tensor_board_folder,
+    #     verbose=1
+    # )
+
     # Print policy network architecture
     print("Policy architecture:")
     print(agent.policy)
