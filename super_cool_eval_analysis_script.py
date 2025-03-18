@@ -82,7 +82,7 @@ plt.fill_between(
 plt.xlabel("Environment Steps")
 plt.ylabel("Cumulative Reward")
 plt.title("RL Policy Rollouts - Cumulative Reward Over Time")
-plt.legend()
+plt.legend(loc="upper left")
 
 # Show plot
 plt.show()
