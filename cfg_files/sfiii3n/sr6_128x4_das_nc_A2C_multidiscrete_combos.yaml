@@ -2,6 +2,10 @@ folders:
   parent_dir: "./results/"
   model_name: "sr6_128x4_das_nc_A2C_multidiscrete_combos"
 
+episode_saving_settings:
+  num_iters: 50
+  csv_filename: "super_cool_eval_save_A2C_multidiscrete_combos.csv"
+
 settings:
   game_id: "sfiii3n"
   step_ratio: 6
