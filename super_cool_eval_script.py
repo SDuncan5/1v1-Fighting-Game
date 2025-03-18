@@ -147,6 +147,7 @@ def main(cfg_file, trained_model, test=False):
             plt.plot(cumulative_rewards)
 
             cumulative_rewards = []
+            cumulative_reward = 0
             observation = env.reset()
             if test is True:
                 break
