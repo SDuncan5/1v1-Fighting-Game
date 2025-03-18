@@ -73,6 +73,7 @@ def main(cfg_file, trained_model, test=False):
 
     expectation = 0
     cumulative_rewards = []
+    rewards_data = []
 
     # Create CSV to save to
     num_iterations = 30
@@ -82,7 +83,11 @@ def main(cfg_file, trained_model, test=False):
         num_iterations = params["episode_saving_settings"]["num_iters"]
     highest_stage_completed = 0
     cumulative_stage_reached = 0
-    data = [["Highest Stage:"], ["Avg Stage:"], ["Iteration Number", "Stage Completed"]]
+    data = [
+        ["Highest Stage:"],
+        ["Avg Stage:"],
+        ["Iteration Number", "Stage Completed", "Reward Over Time"],
+    ]
 
     if not params["episode_saving_settings"]["csv_filename"]:
         print("CSV Filename not found")
@@ -126,7 +131,7 @@ def main(cfg_file, trained_model, test=False):
 
             cumulative_stage_reached += stage_reached
 
-            data.append([current_iter, stage_reached])
+            data.append([current_iter, stage_reached, cumulative_rewards])
             current_iter += 1
 
             # print("-----------------------INFO-------------------")
@@ -148,12 +153,6 @@ def main(cfg_file, trained_model, test=False):
             # if info["env_done"] or test is True:
             #     break
 
-    # plot da graph
-    plt.title("Stochastic Policy Action Selection")
-    plt.ylabel("Cumulative Reward")
-    plt.xlabel("Environment Steps")
-    plt.show()
-
     # Close the environment
     env.close()
 
@@ -164,6 +163,12 @@ def main(cfg_file, trained_model, test=False):
     with open(filename, "w", newline="") as file:
         writer = csv.writer(file)
         writer.writerows(data)
+
+    # plot da graph
+    plt.title("Stochastic Policy Action Selection")
+    plt.ylabel("Cumulative Reward")
+    plt.xlabel("Environment Steps")
+    plt.show()
 
     # Return success
     return 0
