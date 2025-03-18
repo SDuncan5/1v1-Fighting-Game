@@ -78,7 +78,7 @@ for file_idx, results_file in enumerate(args.results_files):
 # Labels and title
 plt.xlabel("Environment Steps")
 plt.ylabel("Cumulative Reward")
-plt.title("RL Policy Rollouts - Mean & Std Dev")
+plt.title("RL Policy Rollouts - Cumulative Reward over Time")
 plt.legend(loc="upper left")
 
 # Show final overlay plot
