@@ -7,3 +7,4 @@ models/PPO_Multidiscrete_all_actions12000000.zip filter=lfs diff=lfs merge=lfd -
 models/PPO_Multidiscrete_all_actions4000000.zip filter=lfs diff=lfs merge=lfd -text
 models/PPO_Multidiscrete_all_actions8000000.zip filter=lfs diff=lfs merge=lfd -text
 models/PPO_Multidiscrete_all_actions18000000.zip filter=lfs diff=lfs merge=lfd -text
+models/PPO_Multidiscrete_all_actions24000000.zip filter=lfs diff=lfs merge=lfd -text
