@@ -4,6 +4,14 @@
 
 Developing a deep reinforcement learning agent to play Street Fighter III.
 
+### Acknowledgements
+This is a project for CSC 570; Aritificial Intelligence in Games, taught by Prof. Canaan at Cal Poly San Luis Obispo.
+
+We reply heavily on the following libraries:
+- [Diambra](https://github.com/diambra)
+- [Stable-Baselines3](https://github.com/DLR-RM/stable-baselines3)
+- [Stable-Baselines3-Contrib](https://github.com/Stable-Baselines-Team/stable-baselines3-contrib)
+
 ### Authors
 - Abigayle Mercer (abmercer@calpoly.edu)
 - Braedan Kennedy (bkenne07@calpoly.edu)
